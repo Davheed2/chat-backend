@@ -2,11 +2,9 @@
 
 # ExpressJS Project
 
-[![StartEase](https://img.shields.io/badge/Generated%20by-StartEase-blue)](https://github.com/JC-Coder/startease)
-
 ## Overview
 
-Welcome to your project generated using StartEase! This guide will walk you through the basic configuration steps to get your backend project up and running.
+Welcome to my project! This guide will walk you through the basic configuration steps to get your backend project up and running.
 
 ## Prerequisites
 
