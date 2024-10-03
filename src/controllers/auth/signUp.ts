@@ -1,8 +1,8 @@
 import { catchAsync } from '@/middlewares';
 import { UserModel } from '@/models';
-import { AppError, AppResponse, hashPassword } from '@/common/utils';
+import { AppError, AppResponse } from '@/common/utils';
 import { Provider } from '@/common/constants';
-import { validateEmail, validatePassword, validatePhoneNumber, validateUsername, validateName } from '@/common/utils';
+import { validateEmail, validatePassword, validatePhoneNumber, validateUsername, trim } from '@/common/utils';
 
 export const signUp = catchAsync(async (req, res) => {
 	let { firstName, lastName, username, email, password, phoneNumber } = req.body;
@@ -11,8 +11,8 @@ export const signUp = catchAsync(async (req, res) => {
 		throw new AppError('Incomplete signup data', 400);
 	}
 
-	firstName = validateName(firstName);
-	lastName = validateName(lastName);
+	firstName = trim(firstName);
+	lastName = trim(lastName);
 	email = validateEmail(email);
 	phoneNumber = validatePhoneNumber(phoneNumber);
 	username = validateUsername(username);
@@ -29,15 +29,13 @@ export const signUp = catchAsync(async (req, res) => {
 		}
 	}
 
-	const hashedPassword = await hashPassword(password);
-
 	const user = await UserModel.create({
 		email,
 		firstName,
 		lastName,
 		username,
 		phoneNumber,
-		password: hashedPassword,
+		password,
 		providers: Provider.Local,
 		ipAddress: req.ip,
 	});

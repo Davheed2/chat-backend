@@ -77,6 +77,6 @@ export const validatePassword = (password: string): string => {
  * @param {string} name - The name to trim.
  * @returns {string} - The trimmed name.
  */
-export const validateName = (name: string): string => {
+export const trim = (name: string): string => {
 	return name.trim();
 };
