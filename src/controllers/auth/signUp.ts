@@ -1,8 +1,9 @@
 import { catchAsync } from '@/middlewares';
 import { UserModel } from '@/models';
-import { AppError, AppResponse } from '@/common/utils';
+import { AppError, AppResponse, convertToRecord } from '@/common/utils';
 import { Provider } from '@/common/constants';
 import { validateEmail, validatePassword, validatePhoneNumber, validateUsername, trim } from '@/common/utils';
+import { setCache, toJSON } from '@/common/utils';
 
 export const signUp = catchAsync(async (req, res) => {
 	let { firstName, lastName, username, email, password, phoneNumber } = req.body;
@@ -42,6 +43,8 @@ export const signUp = catchAsync(async (req, res) => {
 
 	user.generateAuthToken(res);
 	user.generateRefreshToken(res);
+
+	await setCache(user._id.toString(), toJSON(convertToRecord(user), ['password']));
 
 	return AppResponse(res, 201, user, 'Account created successfully');
 });

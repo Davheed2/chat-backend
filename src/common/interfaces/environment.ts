@@ -16,4 +16,9 @@ export interface IEnvironment {
 		ACCESS: string;
 		REFRESH: string;
 	}
+	REDIS: {
+		URL: string;
+		PORT: number;
+		PASSWORD: string;
+	};
 }

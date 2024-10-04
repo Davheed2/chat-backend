@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import { randomBytes, randomInt } from 'crypto';
 import { encode } from 'hi-base32';
+import { redisClient } from '../config';
 
 const generateRandomString = () => {
 	return randomBytes(32).toString('hex');
@@ -61,6 +62,49 @@ const parseTokenDuration = (duration: string): number => {
 	}
 };
 
+const setCache = async (key: string, value: string, expiryInSeconds: number = 3600): Promise<void> => {
+	try {
+		await redisClient.set(key, value, 'EX', expiryInSeconds); // EX sets the expiration in seconds
+		console.log(`Cache set for key: ${key}`);
+	} catch (error) {
+		console.error(`Error setting cache for key: ${key}`, error);
+	}
+};
+
+const getCache = async (key: string): Promise<string | null> => {
+	try {
+		const data = await redisClient.get(key);
+		if (data) {
+			console.log(`Cache hit for key: ${key}`);
+		} else {
+			console.log(`Cache miss for key: ${key}`);
+		}
+		return data;
+	} catch (error) {
+		console.error(`Error fetching cache for key: ${key}`, error);
+		return null;
+	}
+};
+
+const deleteCache = async (key: string): Promise<void> => {
+	try {
+		await redisClient.del(key);
+		console.log(`Cache deleted for key: ${key}`);
+	} catch (error) {
+		console.error(`Error deleting cache for key: ${key}`, error);
+	}
+};
+
+const toJSON = <T extends Record<string, unknown>>(obj: T, excludeFields: string[] = []): string => {
+	const sanitizedObj: Partial<T> = { ...obj };
+	excludeFields.forEach((field) => delete sanitizedObj[field]);
+	return JSON.stringify(sanitizedObj);
+};
+
+const convertToRecord = (obj: unknown): Record<string, unknown> => {
+    return obj as Record<string, unknown>;
+};
+
 export {
 	dateFromString,
 	generateRandom6DigitKey,
@@ -69,4 +113,9 @@ export {
 	hashPassword,
 	comparePassword,
 	parseTokenDuration,
+	setCache,
+	getCache,
+	deleteCache,
+	toJSON,
+	convertToRecord
 };

@@ -18,4 +18,9 @@ export const ENVIRONMENT: IEnvironment = {
 		ACCESS: process.env.ACCESS_TOKEN_EXPIRES_IN!,
 		REFRESH: process.env.REFRESH_TOKEN_EXPIRES_IN!,
 	},
+	REDIS: {
+		URL: process.env.QUEUE_REDIS_URL!,
+		PASSWORD: process.env.QUEUE_REDIS_PASSWORD!,
+		PORT: parseInt(process.env.QUEUE_REDIS_PORT!),
+	},
 };

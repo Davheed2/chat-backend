@@ -9,8 +9,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 ///////////////////////////////////////////////////////////////////////
-import { ENVIRONMENT, connectDb, disconnectDb } from '@/common/config';
-//1
+import { ENVIRONMENT, connectDb, disconnectDb, connectRedis, disconnectRedis } from '@/common/config';
 import '@/common/interfaces/request';
 import { logger, stream } from '@/common/utils';
 import { errorHandler } from '@/controllers';
@@ -173,6 +172,7 @@ const server = http.createServer(app);
 
 const appServer = server.listen(port, async () => {
 	await connectDb();
+	await connectRedis();
 	console.log(`==> App ${appName ? `: ${appName}` : ''} is running on port ${port}`);
 });
 /**
@@ -194,10 +194,10 @@ process.on('unhandledRejection', async (error: Error) => {
 async function shutdown() {
 	console.log('Shutting down...');
 	await disconnectDb();
+	await disconnectRedis();
 	process.exit(0);
 }
 
-//4
 // graceful shutdown on SIGINT and SIGTERM
 process.on('SIGINT', shutdown);
 process.on('SIGTERM', shutdown);

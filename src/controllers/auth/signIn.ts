@@ -1,6 +1,6 @@
 import { catchAsync } from '@/middlewares';
 import { UserModel } from '@/models';
-import { AppError, AppResponse } from '@/common/utils';
+import { AppError, AppResponse, convertToRecord, setCache, toJSON } from '@/common/utils';
 import { Provider } from '@/common/constants';
 import { trim } from '@/common/utils';
 
@@ -64,5 +64,6 @@ export const signIn = catchAsync(async (req, res) => {
 	user.lastLogin = new Date();
 	user.save();
 
+	await setCache(user.id, toJSON(convertToRecord(user)));
 	return AppResponse(res, 200, user, 'Signed in successfully');
 });
