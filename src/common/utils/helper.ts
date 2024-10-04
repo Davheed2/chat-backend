@@ -2,6 +2,8 @@ import bcrypt from 'bcryptjs';
 import { randomBytes, randomInt } from 'crypto';
 import { encode } from 'hi-base32';
 import { redisClient } from '../config';
+import { startEmailQueue } from '@/queues/emailQueue';
+import { IUser, WelcomeEmailData } from '../interfaces';
 
 const generateRandomString = () => {
 	return randomBytes(32).toString('hex');
@@ -102,7 +104,23 @@ const toJSON = <T extends Record<string, unknown>>(obj: T, excludeFields: string
 };
 
 const convertToRecord = (obj: unknown): Record<string, unknown> => {
-    return obj as Record<string, unknown>;
+	return obj as Record<string, unknown>;
+};
+
+const sendVerificationEmail = async (user: IUser): Promise<void> => {
+	const { addEmailToQueue } = await startEmailQueue();
+
+	const emailData: WelcomeEmailData = {
+		to: user.email,
+		priority: 'high',
+		name: user.firstName,
+		otp: generateRandom6DigitKey(),
+	};
+
+	addEmailToQueue({
+		type: 'welcomeEmail',
+		data: emailData,
+	});
 };
 
 export {
@@ -117,5 +135,6 @@ export {
 	getCache,
 	deleteCache,
 	toJSON,
-	convertToRecord
+	convertToRecord,
+	sendVerificationEmail
 };

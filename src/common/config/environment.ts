@@ -23,4 +23,8 @@ export const ENVIRONMENT: IEnvironment = {
 		PASSWORD: process.env.QUEUE_REDIS_PASSWORD!,
 		PORT: parseInt(process.env.QUEUE_REDIS_PORT!),
 	},
+	EMAIL: {
+		GMAIL_USER: process.env.GMAIL_USER!,
+		GMAIL_PASSWORD: process.env.GMAIL_PASSWORD!,
+	},
 };

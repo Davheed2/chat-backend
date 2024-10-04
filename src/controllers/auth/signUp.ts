@@ -4,6 +4,7 @@ import { AppError, AppResponse, convertToRecord } from '@/common/utils';
 import { Provider } from '@/common/constants';
 import { validateEmail, validatePassword, validatePhoneNumber, validateUsername, trim } from '@/common/utils';
 import { setCache, toJSON } from '@/common/utils';
+import { sendVerificationEmail } from '@/common/utils';
 
 export const signUp = catchAsync(async (req, res) => {
 	let { firstName, lastName, username, email, password, phoneNumber } = req.body;
@@ -26,7 +27,7 @@ export const signUp = catchAsync(async (req, res) => {
 		} else if (existingUser.phoneNumber === phoneNumber) {
 			throw new AppError('User with this phone number already exists', 409);
 		} else if (existingUser.username === username) {
-			throw new AppError('User with this phone number already exists', 409);
+			throw new AppError('User with this username already exists', 409);
 		}
 	}
 
@@ -43,6 +44,8 @@ export const signUp = catchAsync(async (req, res) => {
 
 	user.generateAuthToken(res);
 	user.generateRefreshToken(res);
+
+	await sendVerificationEmail(user);
 
 	await setCache(user._id.toString(), toJSON(convertToRecord(user), ['password']));
 

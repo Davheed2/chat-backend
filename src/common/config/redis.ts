@@ -8,7 +8,7 @@ export const connectRedis = async (): Promise<void> => {
 			port: ENVIRONMENT.REDIS.PORT,
 			host: ENVIRONMENT.REDIS.URL,
 			password: ENVIRONMENT.REDIS.PASSWORD,
-			// maxRetriesPerRequest: null,
+			maxRetriesPerRequest: null,
 			// enableOfflineQueue: false,
 			// offlineQueue: false,
 		});

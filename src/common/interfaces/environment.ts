@@ -15,10 +15,14 @@ export interface IEnvironment {
 	JWT_EXPIRES_IN: {
 		ACCESS: string;
 		REFRESH: string;
-	}
+	};
 	REDIS: {
 		URL: string;
 		PORT: number;
 		PASSWORD: string;
+	};
+	EMAIL: {
+		GMAIL_USER: string;
+		GMAIL_PASSWORD: string;
 	};
 }
