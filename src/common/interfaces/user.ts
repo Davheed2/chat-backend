@@ -17,7 +17,7 @@ export interface IUser {
 	passwordChangedAt: Date;
 	ipAddress: string;
 	loginRetries: number;
-	refreshToken: string;
+	emailVerificationToken: string;
 	isSuspended: boolean;
 	isEmailVerified: boolean;
 	isDeleted: boolean;

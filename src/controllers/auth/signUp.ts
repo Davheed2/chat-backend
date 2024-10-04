@@ -1,10 +1,9 @@
 import { catchAsync } from '@/middlewares';
 import { UserModel } from '@/models';
-import { AppError, AppResponse, convertToRecord } from '@/common/utils';
+import { AppError, AppResponse, convertToRecord, hashPassword } from '@/common/utils';
 import { Provider } from '@/common/constants';
 import { validateEmail, validatePassword, validatePhoneNumber, validateUsername, trim } from '@/common/utils';
-import { setCache, toJSON } from '@/common/utils';
-import { sendVerificationEmail } from '@/common/utils';
+import { setCache, toJSON, sendVerificationEmail, generateRandom6DigitKey } from '@/common/utils';
 
 export const signUp = catchAsync(async (req, res) => {
 	let { firstName, lastName, username, email, password, phoneNumber } = req.body;
@@ -45,7 +44,12 @@ export const signUp = catchAsync(async (req, res) => {
 	user.generateAuthToken(res);
 	user.generateRefreshToken(res);
 
-	await sendVerificationEmail(user);
+	const otp = generateRandom6DigitKey();
+	await sendVerificationEmail(user, otp);
+
+	const hashedOtp = await hashPassword(otp);
+	user.emailVerificationToken = hashedOtp;
+	user.save();
 
 	await setCache(user._id.toString(), toJSON(convertToRecord(user), ['password']));
 

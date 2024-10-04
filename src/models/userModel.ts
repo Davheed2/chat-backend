@@ -62,6 +62,10 @@ const userSchema = new mongoose.Schema<IUser, unknown, UserMethods>(
 			type: [String],
 			select: false,
 		},
+		emailVerificationToken: {
+			type: String,
+			select: false,
+		},
 		passwordResetToken: {
 			type: String,
 			select: false,

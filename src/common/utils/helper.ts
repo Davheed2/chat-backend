@@ -107,14 +107,14 @@ const convertToRecord = (obj: unknown): Record<string, unknown> => {
 	return obj as Record<string, unknown>;
 };
 
-const sendVerificationEmail = async (user: IUser): Promise<void> => {
+const sendVerificationEmail = async (user: IUser, otp: string): Promise<void> => {
 	const { addEmailToQueue } = await startEmailQueue();
 
 	const emailData: WelcomeEmailData = {
 		to: user.email,
 		priority: 'high',
 		name: user.firstName,
-		otp: generateRandom6DigitKey(),
+		otp,
 	};
 
 	addEmailToQueue({
