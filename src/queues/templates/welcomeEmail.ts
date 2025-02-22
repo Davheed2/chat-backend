@@ -7,8 +7,7 @@ export const welcomeEmail = (data: { name: string; otp: string }) => {
 	return baseTemplate(
 		`<h2>Welcome, ${data.name}!</h2>
         <p>
-            We’re thrilled to have you on board. To complete your registration on <strong>Davheed</strong>, please click the link below to verify
-            your email address:
+            We’re thrilled to have you on board. To complete your registration on <strong>Davheed</strong>, please click the link below to verify your email address:
         </p>
 
         <table class="body-action" align="center" width="100%" cellpadding="0" cellspacing="0">

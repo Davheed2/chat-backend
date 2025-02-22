@@ -103,6 +103,12 @@ const toJSON = <T extends Record<string, unknown>>(obj: T, excludeFields: string
 	return JSON.stringify(sanitizedObj);
 };
 
+// const toJSON = <T extends Record<string, unknown>>(obj: T, excludeFields: string[] = []): Partial<T> => {
+// 	const sanitizedObj: Partial<T> = { ...obj };
+// 	excludeFields.forEach((field) => delete sanitizedObj[field]);
+// 	return sanitizedObj;
+// };
+
 const convertToRecord = (obj: unknown): Record<string, unknown> => {
 	return obj as Record<string, unknown>;
 };

@@ -8,7 +8,7 @@ export const signIn = catchAsync(async (req, res) => {
 	let { username, password } = req.body;
 
 	if (!username || !password) {
-		throw new AppError('Incomplete signup data', 400);
+		throw new AppError('Incomplete signin data', 400);
 	}
 
 	username = username ? trim(username) : null;
